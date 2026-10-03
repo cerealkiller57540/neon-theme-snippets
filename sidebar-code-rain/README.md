@@ -2,7 +2,7 @@
 
 Falling katakana under the last panel of the Home Assistant sidebar. Pure CSS plus three SVG files: no custom card, no JavaScript in the browser.
 
-<img src="images/preview.png" alt="Code rain under the sidebar panels" width="257">
+<img src="images/preview.gif" alt="Code rain under the sidebar panels" width="257">
 
 - Starts right under the **last panel** and fills the free space down to the spacer. Add or remove a panel and it follows, there is nothing to recalibrate.
 - Two layers (front and back) fall at different speeds, and each column has its own speed, so the overall pattern does not visibly loop.

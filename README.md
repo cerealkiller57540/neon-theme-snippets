@@ -6,7 +6,7 @@ Small, self-contained CSS snippets for Home Assistant themes. Each folder holds 
 |---|---|---|
 | [sidebar-code-rain](sidebar-code-rain/) | Falling katakana under the last panel of the sidebar | card-mod |
 
-<img src="sidebar-code-rain/images/preview.png" alt="Sidebar code rain" width="200">
+<img src="sidebar-code-rain/images/preview.gif" alt="Sidebar code rain" width="200">
 
 ## License
 
