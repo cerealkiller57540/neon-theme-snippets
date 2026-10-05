@@ -7,7 +7,7 @@ Small, self-contained snippets for Home Assistant themes. Each folder holds one 
 | [sidebar-code-rain](sidebar-code-rain/) | Falling katakana under the last panel of the sidebar | card-mod |
 | [theme-everywhere](theme-everywhere/) | Settings, Developer tools, Logbook, Media… inherit your theme's background and glass | `frontend: extra_module_url` |
 
-<img src="sidebar-code-rain/images/preview.gif" alt="Sidebar code rain" width="200">
+<img src="sidebar-code-rain/images/preview.webp" alt="Sidebar code rain" width="200">
 
 ## License
 
