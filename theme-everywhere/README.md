@@ -8,7 +8,7 @@ Home Assistant themes stop at the dashboards. Settings, Developer tools, Logbook
 
 - **Your theme does the styling.** The script adds no colors of its own: it only reads theme variables (`var(--lovelace-background)`, `var(--ha-card-background)`…). Change your theme or your background image and the pages follow, nothing to reload.
 - **Missing variable = original rendering.** A theme without `lovelace-background` gets HA's normal background.
-- Covers Settings (all sections, integration pages, tables, Apps), Developer tools, Logbook, Media browser, automation and script traces, toasts, notification drawer, and HACS (custom panel iframe).
+- Covers Settings (all sections, integration pages, tables, Apps), Developer tools, Logbook, History, Assist debug, Media browser, automation and script traces, toasts, notification drawer, and HACS (custom panel iframe).
 - Optional extras, on by default: pulsing neon header, neon scrollbars and tinted text selection, and a **SIGNAL LOST** screen when the connection to Home Assistant drops (GLITCH the cat, hologram style, with a wink when it comes back).
 
 ## Install

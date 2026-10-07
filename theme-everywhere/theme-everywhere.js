@@ -108,6 +108,15 @@ const THEME_EVERYWHERE_OPTS = (() => {
     "ha-logbook{" + GLASS + ";margin:0 12px 12px 0;overflow:hidden}" +
     "ha-filter-pane{" + GLASS + ";margin:0 12px 12px 12px;overflow:hidden}";
   const FILTER = ".header{background:transparent !important}";
+  // History and Assist debug: toolbar painted in opaque primary background, like the Logbook.
+  // History paints no background at all (falls through to <html>): background layer, glass filter
+  // pane and charts, and a glass pill for the empty state.
+  const HISTORY = ".toolbar{" + GLASS + ";border-radius:0 !important;border-width:0 0 1px 0 !important;" +
+    "border-color:rgba(var(--rgb-primary-color),.35) !important;box-shadow:none !important}" +
+    "ha-filter-pane{" + GLASS + ";margin:0 12px 12px 12px;overflow:hidden}" +
+    "state-history-charts{" + GLASS + ";margin:12px;overflow:hidden}" +
+    "ha-empty-state{" + GLASS + ";margin:auto;width:fit-content;height:fit-content;padding:20px 32px;max-width:90%}";
+  const ASSISTDBG = ".toolbar{background:transparent !important}";
   // Integration in error ("Attention required"): the row only has a 20 % warning tint, bare on the
   // image. Theme glass underneath, warning tint kept on top.
   const ATTN = ":host(.attention) ha-md-list{" + GLASS + ";background:linear-gradient(" +
@@ -176,6 +185,8 @@ const THEME_EVERYWHERE_OPTS = (() => {
     "HA-TOP-APP-BAR-FIXED": [HDR],
     "HA-PANEL-LOGBOOK": [BG, LOGBOOK],
     "HA-FILTER-PANE": [FILTER],
+    "HA-PANEL-HISTORY": [BG, HISTORY],
+    "ASSIST-PIPELINE-DEBUG": [ASSISTDBG],
     "NOTIFICATION-MANAGER": [TOAST],
     "HA-TOAST": [TOASTGLASS],
     "HA-CONFIG-ENTRY-ROW": [ATTN],
