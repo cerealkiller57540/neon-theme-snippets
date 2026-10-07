@@ -123,7 +123,20 @@ const THEME_EVERYWHERE_OPTS = (() => {
     "color-mix(in srgb,var(--warning-color,#ffb800) 14%,transparent)," +
     "color-mix(in srgb,var(--warning-color,#ffb800) 14%,transparent))," +
     "var(--ha-card-background,var(--card-background-color)) !important;" +
-    "border-color:color-mix(in srgb,var(--warning-color,#ffb800) 45%,transparent) !important}";
+    "border-color:color-mix(in srgb,var(--warning-color,#ffb800) 45%,transparent) !important}" +
+    // The banner itself (.config-entry-wrapper) is painted by an opaque "quiet" token: glass underneath, alert tint on top.
+    ".config-entry-wrapper.state-error,.config-entry-wrapper.state-not-loaded,.config-entry-wrapper.state-failed-unload{" +
+    "-webkit-backdrop-filter:var(--ha-card-backdrop-filter,none);backdrop-filter:var(--ha-card-backdrop-filter,none)}" +
+    ".config-entry-wrapper.state-error{background:linear-gradient(" +
+    "color-mix(in srgb,var(--error-color,#db4437) 16%,transparent)," +
+    "color-mix(in srgb,var(--error-color,#db4437) 16%,transparent))," +
+    "var(--ha-card-background,var(--card-background-color)) !important;" +
+    "border:1px solid color-mix(in srgb,var(--error-color,#db4437) 45%,transparent)}" +
+    ".config-entry-wrapper.state-not-loaded,.config-entry-wrapper.state-failed-unload{background:linear-gradient(" +
+    "color-mix(in srgb,var(--warning-color,#ffb800) 16%,transparent)," +
+    "color-mix(in srgb,var(--warning-color,#ffb800) 16%,transparent))," +
+    "var(--ha-card-background,var(--card-background-color)) !important;" +
+    "border:1px solid color-mix(in srgb,var(--warning-color,#ffb800) 45%,transparent)}";
   // Integrations search bar: band painted in opaque primary background (black stripe over the
   // image). Same glass as cards, thin primary line at the bottom to separate it from the grid.
   const SEARCH = ".search{" + GLASS + ";border-radius:0 !important;border-width:0 0 1px 0 !important;" +
