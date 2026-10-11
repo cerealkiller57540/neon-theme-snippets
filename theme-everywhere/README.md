@@ -54,7 +54,12 @@ Example: `/local/theme-everywhere.js?v=1&neon=0`
 | `blacklight-color` | second color of the header pulse | `#B400FF` |
 | `rgb-lavande`, `rgb-blacklight-color` | caret, selection, links (light tints read better than a dark primary on black) | `rgb-primary-color` |
 | `warning-color` | integrations in error, warning log entries | `#ffb800` |
-| `error-color` | error log entries, disabled devices | `#db4437` |
+| `error-color` | error log entries, disabled devices, red channel of the SIGNAL LOST glitch | `#db4437` |
+| `info-color` | cyan channel of the SIGNAL LOST glitch | `#00e5ff` |
+| `success-color` | SIGNAL LOST cat and text | green |
+| `rgb-primary-background-color` | dialog scrim, SIGNAL LOST veil, code blocks in READMEs | near black |
+| `text-primary-color` | SIGNAL LOST title, HACS main button | `#fff` |
+| `primary-font-family`, `ha-font-family-code` | SIGNAL LOST title, log and code text | Orbitron, monospace |
 
 The look depends a lot on `ha-card-background` being **translucent** (e.g. `rgba(4, 2, 14, 0.78)`) with a `ha-card-backdrop-filter` such as `blur(12px) saturate(1.5)`. With an opaque card background you get opaque panels on top of your image.
 

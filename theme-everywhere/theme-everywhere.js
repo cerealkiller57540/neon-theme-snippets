@@ -201,7 +201,7 @@ const THEME_EVERYWHERE_OPTS = (() => {
   const R6 = "calc(var(--ha-card-border-radius,var(--ha-border-radius-lg,12px))*.33)";
   const DLGGLASS = "--ha-dialog-surface-background:rgba(var(--rgb-card-background-color,4,2,14),.78);" +
     "--mdc-dialog-scrim-color:rgba(var(--rgb-primary-background-color,2,1,10),.35);" +
-    "--neo-dialog-sheen:linear-gradient(135deg,rgba(255,255,255,.055),rgba(" + PRI + ",.06) 28%,transparent 52%)," +
+    "--neo-dialog-sheen:linear-gradient(135deg,rgba(255,255,255,.055),rgba(" + LAV + ",.06) 28%,transparent 52%)," +
     "radial-gradient(ellipse at 0 0,rgba(" + PRI + ",.22),transparent 56%);" +
     "--ha-dialog-surface-backdrop-filter:var(--ha-card-backdrop-filter)";
   // Sheen on a dialog surface: inactive until --neo-dialog-sheen is set.
@@ -216,7 +216,7 @@ const THEME_EVERYWHERE_OPTS = (() => {
     "ha-dialog:has(span.warning){--sev:var(--warning-color,#ffb800)}" +
     "span[slot=headerTitle]{letter-spacing:.04em;text-shadow:0 0 14px color-mix(in srgb,var(--sev) 45%,transparent)}" +
     "span[slot=headerTitle] span{font-weight:700;text-shadow:0 0 6px var(--sev),0 0 16px color-mix(in srgb,var(--sev) 70%,transparent)}" +
-    ".contents{font-family:ui-monospace,'JetBrains Mono',Consolas,monospace;font-size:12.5px}" +
+    ".contents{font-family:var(--ha-font-family-code,ui-monospace,monospace);font-size:12.5px}" +
     ".contents p{margin:12px 0 0;padding:12px 16px;line-height:1.75;border-radius:" + R10 + ";" +
     "background:linear-gradient(90deg,color-mix(in srgb,var(--sev) 10%,transparent),rgba(" + PRI + ",.05));" +
     "border:1px solid rgba(" + PRI + ",.28);border-left:3px solid var(--sev);box-shadow:inset 0 0 24px rgba(" + PRI + ",.06)}" +
@@ -235,7 +235,7 @@ const THEME_EVERYWHERE_OPTS = (() => {
     "ha-list-item:has(span.warning){--sev:var(--warning-color,#ffb800)}" +
     "ha-list-item:hover{border-color:color-mix(in srgb,var(--sev) 60%,transparent);" +
     "box-shadow:0 0 14px color-mix(in srgb,var(--sev) 35%,transparent),inset 0 0 18px rgba(" + PRI + ",.08);transform:translateX(2px)}" +
-    ".secondary{font-family:ui-monospace,'JetBrains Mono',Consolas,monospace;font-size:11.5px}" +
+    ".secondary{font-family:var(--ha-font-family-code,ui-monospace,monospace);font-size:11.5px}" +
     ".secondary span.error,.secondary span.critical,.secondary span.warning,.secondary span.info,.secondary span.debug{" +
     "display:inline-block;padding:0 7px;border-radius:" + R6 + ";font-weight:700;letter-spacing:.06em;line-height:1.5;" +
     "border:1px solid currentColor;background:color-mix(in srgb,currentColor 14%,transparent);text-shadow:0 0 6px currentColor}";
@@ -253,7 +253,7 @@ const THEME_EVERYWHERE_OPTS = (() => {
   // HACS iframe: "download" dialog (shadow of the host, then of its mdc ha-dialog) and README.
   const HACSDLG = "mwc-button{--mdc-theme-primary:rgb(" + LAV + ");--mdc-typography-button-letter-spacing:.12em;border-radius:" + R8 + "}" +
     "mwc-button[slot=secondaryAction]{--mdc-theme-primary:var(--secondary-text-color)}" +
-    "mwc-button[slot=primaryAction]{--mdc-theme-primary:var(--primary-text-color);border:1px solid rgba(" + LAV + ",.65);" +
+    "mwc-button[slot=primaryAction]{--mdc-theme-primary:var(--text-primary-color,#fff);border:1px solid rgba(" + LAV + ",.65);" +
     "background:rgba(" + PRI + ",.2);box-shadow:0 0 14px rgba(" + PRI + ",.5),inset 0 0 10px rgba(" + PRI + ",.18)}" +
     "code{color:rgb(" + LAV + ");padding:1px 6px;border-radius:" + R6 + ";border:1px solid rgba(" + PRI + ",.35);background:rgba(" + PRI + ",.12)}" +
     ".note{padding:10px 14px;border-radius:" + R10 + ";border:1px solid rgba(" + PRI + ",.28);border-left:3px solid rgb(" + LAV + ");" +
@@ -274,7 +274,7 @@ const THEME_EVERYWHERE_OPTS = (() => {
     "ha-markdown-element li::marker{color:rgb(" + LAV + ")}" +
     "ha-markdown-element code{padding:1px 6px;border-radius:" + R6 + ";border:1px solid rgba(" + PRI + ",.3);background:rgba(" + PRI + ",.1);color:rgb(" + LAV + ")}" +
     "ha-markdown-element pre{padding:12px 16px;border-radius:" + R10 + ";border:1px solid rgba(" + PRI + ",.35);border-left:3px solid rgb(" + LAV + ");" +
-    "background:rgba(var(--rgb-card-background-color,2,1,10),.55);overflow:auto}" +
+    "background:rgba(var(--rgb-primary-background-color,2,1,10),.55);overflow:auto}" +
     "ha-markdown-element pre code{padding:0;border:0;background:none}" +
     "ha-markdown-element table{border-collapse:separate;border-spacing:0;border:1px solid rgba(" + PRI + ",.35);border-radius:" + R10 + ";overflow:hidden}" +
     "ha-markdown-element th{background:rgba(" + PRI + ",.18);text-shadow:0 0 8px rgba(" + LAV + ",.4)}" +
@@ -455,8 +455,8 @@ const THEME_EVERYWHERE_OPTS = (() => {
   .veil{position:fixed;inset:0;z-index:2147483000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
     pointer-events:none;opacity:0;transition:opacity .5s;
     -webkit-backdrop-filter:blur(${FX.blur}px) grayscale(${FX.desat});backdrop-filter:blur(${FX.blur}px) grayscale(${FX.desat});
-    background:rgba(0,0,0,${FX.dim});--c:hsl(${FX.hue} 90% 62%);--g:${FX.glow}px;--s:${FX.split}px;color:var(--c);
-    font-family:'Orbitron','Eurostile','Bahnschrift','DIN Alternate','Franklin Gothic Medium',system-ui,sans-serif}
+    background:rgba(var(--rgb-primary-background-color,0,0,0),${FX.dim});--c:var(--success-color,hsl(${FX.hue} 90% 62%));--g:${FX.glow}px;--s:${FX.split}px;color:var(--c);
+    font-family:var(--primary-font-family,'Orbitron','Eurostile','Bahnschrift','DIN Alternate','Franklin Gothic Medium',system-ui,sans-serif)}
   .veil[hidden]{display:none}
   .on{opacity:1;animation:boot .9s steps(1) both}
   .veil::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:${FX.scan};mix-blend-mode:overlay;
@@ -467,8 +467,8 @@ const THEME_EVERYWHERE_OPTS = (() => {
     filter:drop-shadow(0 0 calc(var(--g)*.5) var(--c)) drop-shadow(0 0 var(--g) var(--c))}
   .cat{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
   .rd,.cy{mix-blend-mode:screen;opacity:.75}
-  .rd{color:#ff2d6b;animation:rd ${FX.cycle}s steps(1) infinite}
-  .cy{color:#00e5ff;animation:cy ${FX.cycle}s steps(1) infinite}
+  .rd{color:var(--error-color,#ff2d6b);animation:rd ${FX.cycle}s steps(1) infinite}
+  .cy{color:var(--info-color,#00e5ff);animation:cy ${FX.cycle}s steps(1) infinite}
   .main{animation:jit ${FX.cycle}s steps(1) infinite}
   @keyframes rd{0%,100%{transform:translate(calc(var(--s)*-1),0)}17%{transform:translate(calc(var(--s)*-1.8),1px)}35%{transform:translate(calc(var(--s)*-.4),0)}61%{transform:translate(calc(var(--s)*-1.5),-1px)}82%{transform:translate(calc(var(--s)*-.8),0)}}
   @keyframes cy{0%,100%{transform:translate(var(--s),0)}22%{transform:translate(calc(var(--s)*.4),-1px)}44%{transform:translate(calc(var(--s)*1.7),0)}70%{transform:translate(calc(var(--s)*.9),1px)}88%{transform:translate(calc(var(--s)*1.4),0)}}
@@ -479,8 +479,8 @@ const THEME_EVERYWHERE_OPTS = (() => {
   .wink .lid{animation:wink .5s ease-in-out 2}
   @keyframes wink{0%,100%{transform:scaleY(0)}50%{transform:scaleY(1)}}
   .msg{text-align:center;text-shadow:0 0 calc(var(--g)*.4) var(--c),0 0 var(--g) var(--c)}
-  .msg b{display:block;font-size:clamp(22px,6vw,44px);letter-spacing:.22em;font-weight:700;color:#fff}
-  .msg span{display:block;margin-top:10px;font:clamp(12px,2.6vw,18px) 'JetBrains Mono','Cascadia Mono','Consolas','SF Mono',ui-monospace,monospace;letter-spacing:.18em;color:var(--c)}
+  .msg b{display:block;font-size:clamp(22px,6vw,44px);letter-spacing:.22em;font-weight:700;color:var(--text-primary-color,#fff)}
+  .msg span{display:block;margin-top:10px;font:clamp(12px,2.6vw,18px) var(--ha-font-family-code,'JetBrains Mono','Cascadia Mono','Consolas','SF Mono',ui-monospace,monospace);letter-spacing:.18em;color:var(--c)}
   @media (prefers-reduced-motion:reduce){.veil *,.veil::after,.on{animation:none !important}}`;
 
   let host, veil, title, cnt, tick, outT, showT, t0;
