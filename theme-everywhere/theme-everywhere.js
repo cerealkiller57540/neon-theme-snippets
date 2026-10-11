@@ -137,6 +137,16 @@ const THEME_EVERYWHERE_OPTS = (() => {
     "color-mix(in srgb,var(--warning-color,#ffb800) 16%,transparent))," +
     "var(--ha-card-background,var(--card-background-color)) !important;" +
     "border:1px solid color-mix(in srgb,var(--warning-color,#ffb800) 45%,transparent)}";
+  // Disabled device (integration page): HA only sets opacity .5, which gets lost on the image.
+  // Hatching + pill.
+  const DEVOFF = "ha-list-item-button.disabled{opacity:1 !important;background:repeating-linear-gradient(-45deg," +
+    "color-mix(in srgb,var(--error-color,#db4437) 14%,transparent) 0 6px,transparent 6px 14px) !important}" +
+    "ha-list-item-button.disabled>ha-svg-icon,ha-list-item-button.disabled>[slot=supporting-text]{opacity:.5}" +
+    "ha-list-item-button.disabled>[slot=headline]{color:var(--ha-color-text-disabled,var(--disabled-text-color))}" +
+    "ha-list-item-button.disabled>[slot=headline]::after{content:'DISABLED';display:inline-block;margin-inline-start:10px;" +
+    "padding:1px 8px;border-radius:999px;font-size:.7em;font-weight:600;letter-spacing:.08em;vertical-align:middle;" +
+    "color:var(--error-color,#db4437);border:1px solid color-mix(in srgb,var(--error-color,#db4437) 60%,transparent);" +
+    "background:color-mix(in srgb,var(--error-color,#db4437) 15%,transparent)}";
   // Integrations search bar: band painted in opaque primary background (black stripe over the
   // image). Same glass as cards, thin primary line at the bottom to separate it from the grid.
   const SEARCH = ".search{" + GLASS + ";border-radius:0 !important;border-width:0 0 1px 0 !important;" +
@@ -183,8 +193,118 @@ const THEME_EVERYWHERE_OPTS = (() => {
   const TRACE = ".main{" + GLASS + ";border:0 !important;border-radius:0 !important;box-shadow:none !important}" +
     ".toolbar,.graph,.info,ha-tab-group{background:transparent !important}";
 
+  // Card glass on a dialog (ha-dialog): 78 % surface + blur, lighter scrim, sheen (see DLGSHEEN).
+  // --ha-card-background is often a gradient, invalid in the surface's background-color: color only.
+  // Inner radii follow the theme's card radius (18px -> 10/8/6px, HA default 12px -> 6.6/5.4/4px).
+  const R10 = "calc(var(--ha-card-border-radius,var(--ha-border-radius-lg,12px))*.55)";
+  const R8 = "calc(var(--ha-card-border-radius,var(--ha-border-radius-lg,12px))*.45)";
+  const R6 = "calc(var(--ha-card-border-radius,var(--ha-border-radius-lg,12px))*.33)";
+  const DLGGLASS = "--ha-dialog-surface-background:rgba(var(--rgb-card-background-color,4,2,14),.78);" +
+    "--mdc-dialog-scrim-color:rgba(var(--rgb-primary-background-color,2,1,10),.35);" +
+    "--neo-dialog-sheen:linear-gradient(135deg,rgba(255,255,255,.055),rgba(" + PRI + ",.06) 28%,transparent 52%)," +
+    "radial-gradient(ellipse at 0 0,rgba(" + PRI + ",.22),transparent 56%);" +
+    "--ha-dialog-surface-backdrop-filter:var(--ha-card-backdrop-filter)";
+  // Sheen on a dialog surface: inactive until --neo-dialog-sheen is set.
+  const DLGSHEEN = "wa-dialog::part(dialog){background-image:var(--neo-dialog-sheen,none)}";
+
+  // System log entry details (/config/logs): raw text on black, dark links. Metadata in a mono
+  // block, messages as glass rows; --sev = level color (read from the title's class, :has).
+  const LOGDLG = "a{color:rgb(" + LAV + ") !important;text-decoration:none;border-bottom:1px solid rgba(" + LAV + ",.45)}" +
+    "a:hover{text-shadow:0 0 8px rgba(" + LAV + ",.8)}" +
+    "ha-dialog{--sev:var(--primary-color);" + DLGGLASS + "}" +
+    "ha-dialog:has(span.error),ha-dialog:has(span.critical){--sev:var(--error-color,#db4437)}" +
+    "ha-dialog:has(span.warning){--sev:var(--warning-color,#ffb800)}" +
+    "span[slot=headerTitle]{letter-spacing:.04em;text-shadow:0 0 14px color-mix(in srgb,var(--sev) 45%,transparent)}" +
+    "span[slot=headerTitle] span{font-weight:700;text-shadow:0 0 6px var(--sev),0 0 16px color-mix(in srgb,var(--sev) 70%,transparent)}" +
+    ".contents{font-family:ui-monospace,'JetBrains Mono',Consolas,monospace;font-size:12.5px}" +
+    ".contents p{margin:12px 0 0;padding:12px 16px;line-height:1.75;border-radius:" + R10 + ";" +
+    "background:linear-gradient(90deg,color-mix(in srgb,var(--sev) 10%,transparent),rgba(" + PRI + ",.05));" +
+    "border:1px solid rgba(" + PRI + ",.28);border-left:3px solid var(--sev);box-shadow:inset 0 0 24px rgba(" + PRI + ",.06)}" +
+    ".contents ul{list-style:none;margin:12px 0 4px;padding:0;display:flex;flex-direction:column;gap:6px}" +
+    ".contents li{padding:8px 12px 8px 14px;border-radius:" + R8 + ";line-height:1.5;overflow-wrap:anywhere;" +
+    "background:rgba(" + PRI + ",.07);border:1px solid rgba(" + PRI + ",.22);border-left:3px solid var(--sev);color:var(--primary-text-color)}" +
+    ".contents li::before{content:'›';color:var(--sev);margin-right:8px;font-weight:700}";
+
+  // System log list (/config/logs): one card per entry, border and pill in the severity color.
+  const LOGLIST = ".card-header{letter-spacing:.04em !important;text-shadow:0 0 12px rgba(" + LAV + ",.6)}" +
+    "ha-list{padding:4px 12px 8px}" +
+    "ha-list-item{--sev:var(--primary-color);margin:0 0 8px;border-radius:" + R10 + ";overflow:hidden;" +
+    "background:linear-gradient(90deg,color-mix(in srgb,var(--sev) 9%,transparent),rgba(" + PRI + ",.04) 60%);" +
+    "border:1px solid rgba(" + PRI + ",.22);border-left:3px solid var(--sev);transition:box-shadow .2s,border-color .2s,transform .2s}" +
+    "ha-list-item:has(span.error),ha-list-item:has(span.critical){--sev:var(--error-color,#db4437)}" +
+    "ha-list-item:has(span.warning){--sev:var(--warning-color,#ffb800)}" +
+    "ha-list-item:hover{border-color:color-mix(in srgb,var(--sev) 60%,transparent);" +
+    "box-shadow:0 0 14px color-mix(in srgb,var(--sev) 35%,transparent),inset 0 0 18px rgba(" + PRI + ",.08);transform:translateX(2px)}" +
+    ".secondary{font-family:ui-monospace,'JetBrains Mono',Consolas,monospace;font-size:11.5px}" +
+    ".secondary span.error,.secondary span.critical,.secondary span.warning,.secondary span.info,.secondary span.debug{" +
+    "display:inline-block;padding:0 7px;border-radius:" + R6 + ";font-weight:700;letter-spacing:.06em;line-height:1.5;" +
+    "border:1px solid currentColor;background:color-mix(in srgb,currentColor 14%,transparent);text-shadow:0 0 6px currentColor}";
+
+  // Automation and script editors: the card glass wraps When / And if / Then do.
+  const AUTOEDIT = ".content{" + GLASS + ";padding:12px 16px 24px !important;margin-top:8px}";
+  // Blueprint automation editor: no .content wrapper, glass on the host. HA gives it a 671px
+  // min-height and a 64px margin under the card, which would stretch the glass into empty space.
+  const BPEDIT = ":host{display:block;min-height:0 !important;" + GLASS + ";padding:12px 16px 20px !important;margin:8px 0 72px}" +
+    "ha-card{margin-bottom:0 !important}";
+  // Integration cards: thin fading line between the name and the device count.
+  const INTCARD = "ha-integration-card-footer{margin-top:2px;background:linear-gradient(90deg,transparent," +
+    "rgba(" + PRI + ",.5) 18%,rgba(" + LAV + ",.75) 50%,rgba(" + PRI + ",.5) 82%,transparent) top/100% 1px no-repeat}";
+
+  // HACS iframe: "download" dialog (shadow of the host, then of its mdc ha-dialog) and README.
+  const HACSDLG = "mwc-button{--mdc-theme-primary:rgb(" + LAV + ");--mdc-typography-button-letter-spacing:.12em;border-radius:" + R8 + "}" +
+    "mwc-button[slot=secondaryAction]{--mdc-theme-primary:var(--secondary-text-color)}" +
+    "mwc-button[slot=primaryAction]{--mdc-theme-primary:var(--primary-text-color);border:1px solid rgba(" + LAV + ",.65);" +
+    "background:rgba(" + PRI + ",.2);box-shadow:0 0 14px rgba(" + PRI + ",.5),inset 0 0 10px rgba(" + PRI + ",.18)}" +
+    "code{color:rgb(" + LAV + ");padding:1px 6px;border-radius:" + R6 + ";border:1px solid rgba(" + PRI + ",.35);background:rgba(" + PRI + ",.12)}" +
+    ".note{padding:10px 14px;border-radius:" + R10 + ";border:1px solid rgba(" + PRI + ",.28);border-left:3px solid rgb(" + LAV + ");" +
+    "background:rgba(" + PRI + ",.06);line-height:1.6}.note p{margin:8px 0 0}" +
+    "ha-expansion-panel{border:1px solid rgba(" + PRI + ",.28);border-radius:" + R10 + ";background:rgba(" + PRI + ",.05);overflow:hidden}";
+  const HACSDLGBOX = ".mdc-dialog__title{font-weight:700 !important;letter-spacing:.04em;color:var(--primary-text-color) !important;" +
+    "text-shadow:0 0 12px rgba(" + LAV + ",.6);border-bottom:1px solid rgba(" + PRI + ",.35);padding-bottom:12px !important;margin-bottom:0 !important}" +
+    ".mdc-dialog__surface{" + GLASS + "}" +
+    ".mdc-dialog__title::before{display:none}.mdc-dialog__actions{border-top:1px solid rgba(" + PRI + ",.22);margin-top:4px}";
+  const MD = "ha-markdown-element{line-height:1.6}" +
+    "ha-markdown-element a{color:rgb(" + LAV + ") !important;text-decoration:underline;text-decoration-color:rgba(" + LAV + ",.45);text-underline-offset:3px}" +
+    "ha-markdown-element a:hover{text-shadow:0 0 8px rgba(" + LAV + ",.8)}" +
+    "ha-markdown-element h1{padding-bottom:8px;border-bottom:1px solid rgba(" + PRI + ",.4);text-shadow:0 0 14px rgba(" + LAV + ",.55)}" +
+    "ha-markdown-element h2{padding:8px 14px;border-radius:" + R10 + ";border:1px solid rgba(" + PRI + ",.35);border-left:3px solid rgb(" + LAV + ");" +
+    "background:linear-gradient(90deg,rgba(" + PRI + ",.14),rgba(" + PRI + ",.03));box-shadow:inset 0 0 18px rgba(" + PRI + ",.08);text-shadow:0 0 10px rgba(" + LAV + ",.45)}" +
+    "ha-markdown-element h3,ha-markdown-element h4{padding:3px 12px;border-left:3px solid rgba(" + LAV + ",.7);border-bottom:1px solid rgba(" + PRI + ",.22);border-radius:0 " + R8 + " 0 0}" +
+    "ha-markdown-element>ul,ha-markdown-element>ol{padding:12px 16px 12px 34px;border-radius:" + R10 + ";border:1px solid rgba(" + PRI + ",.25);background:rgba(" + PRI + ",.04)}" +
+    "ha-markdown-element li::marker{color:rgb(" + LAV + ")}" +
+    "ha-markdown-element code{padding:1px 6px;border-radius:" + R6 + ";border:1px solid rgba(" + PRI + ",.3);background:rgba(" + PRI + ",.1);color:rgb(" + LAV + ")}" +
+    "ha-markdown-element pre{padding:12px 16px;border-radius:" + R10 + ";border:1px solid rgba(" + PRI + ",.35);border-left:3px solid rgb(" + LAV + ");" +
+    "background:rgba(var(--rgb-card-background-color,2,1,10),.55);overflow:auto}" +
+    "ha-markdown-element pre code{padding:0;border:0;background:none}" +
+    "ha-markdown-element table{border-collapse:separate;border-spacing:0;border:1px solid rgba(" + PRI + ",.35);border-radius:" + R10 + ";overflow:hidden}" +
+    "ha-markdown-element th{background:rgba(" + PRI + ",.18);text-shadow:0 0 8px rgba(" + LAV + ",.4)}" +
+    "ha-markdown-element th,ha-markdown-element td{padding:6px 12px;border-bottom:1px solid rgba(" + PRI + ",.18);border-right:1px solid rgba(" + PRI + ",.14)}" +
+    "ha-markdown-element tr:last-child td{border-bottom:0}ha-markdown-element th:last-child,ha-markdown-element td:last-child{border-right:0}" +
+    "ha-markdown-element blockquote{margin:12px 0;padding:8px 16px;border-radius:" + R10 + ";border:1px solid rgba(" + PRI + ",.28);border-left:3px solid rgb(" + LAV + ");background:rgba(" + PRI + ",.06)}" +
+    "ha-markdown-element>p,ha-markdown-element>ul,ha-markdown-element>ol,ha-markdown-element>table,ha-markdown-element>blockquote,ha-markdown-element>h2{" + GLASS + "}" +
+    "ha-markdown-element>p{padding:10px 16px}ha-markdown-element>table{display:block;overflow:auto}" +
+    "ha-markdown-element>h2{border-left:3px solid rgb(" + LAV + ")}" +
+    "ha-markdown-element h1,ha-markdown-element h3,ha-markdown-element h4{" + HALO + "}" +
+    "ha-markdown-element hr{border:0;height:1px;background:linear-gradient(90deg,transparent,rgba(" + LAV + ",.6),transparent)}";
+
+  // Styled only inside a custom panel iframe (HACS): same tag name, different component.
+  const FRAME_PLAN = {
+    "HACS-DOWNLOAD-DIALOG": [HACSDLG],
+    "HA-DIALOG": [HACSDLGBOX],
+    "HA-MARKDOWN": [MD],
+    "HACS-REPOSITORY-DASHBOARD": ["ha-card{" + GLASS + ";padding:4px 8px}"],
+  };
+
   // CSS per host tag (as text: sheets are built PER window, see install()).
   const PLAN = {
+    "DIALOG-SYSTEM-LOG-DETAIL": [LOGDLG],
+    "SYSTEM-LOG-CARD": [LOGLIST],
+    "DIALOG-ADD-INTEGRATION": ["ha-dialog{" + DLGGLASS + "}"],
+    "HA-DIALOG": [DLGSHEEN],
+    "MANUAL-AUTOMATION-EDITOR": [AUTOEDIT],
+    "MANUAL-SCRIPT-EDITOR": [AUTOEDIT],
+    "BLUEPRINT-AUTOMATION-EDITOR": [BPEDIT],
+    "HA-INTEGRATION-CARD": [INTCARD],
     "HASS-TABS-SUBPAGE": [BG, HDR],
     "HASS-SUBPAGE": [BG, HDR],
     "HA-CONFIG-DASHBOARD": [BG, TIP],
@@ -203,6 +323,7 @@ const THEME_EVERYWHERE_OPTS = (() => {
     "NOTIFICATION-MANAGER": [TOAST],
     "HA-TOAST": [TOASTGLASS],
     "HA-CONFIG-ENTRY-ROW": [ATTN],
+    "HA-CONFIG-ENTRY-DEVICE-ROW": [DEVOFF],
     "HA-CONFIG-INTEGRATIONS-DASHBOARD": [SEARCH],
     "HASS-TABS-SUBPAGE-DATA-TABLE": [TABLEBAR],
     "HA-DATA-TABLE": [GROUP],
@@ -268,10 +389,11 @@ const THEME_EVERYWHERE_OPTS = (() => {
       return cache.get(css);
     };
     const sel = mk(SEL);
+    const inFrame = win !== win.top;
 
     // Lit rewrites adoptedStyleSheets on every render: keep our sheets last.
     const adopt = (host, root) => {
-      const mine = [sel, ...(PLAN[host.tagName] || []).map(mk)];
+      const mine = [sel, ...(PLAN[host.tagName] || []).concat(inFrame ? FRAME_PLAN[host.tagName] || [] : []).map(mk)];
       Object.defineProperty(root, "adoptedStyleSheets", {
         configurable: true,
         get() {

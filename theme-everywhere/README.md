@@ -9,6 +9,7 @@ Home Assistant themes stop at the dashboards. Settings, Developer tools, Logbook
 - **Your theme does the styling.** The script adds no colors of its own: it only reads theme variables (`var(--lovelace-background)`, `var(--ha-card-background)`…). Change your theme or your background image and the pages follow, nothing to reload.
 - **Missing variable = original rendering.** A theme without `lovelace-background` gets HA's normal background.
 - Covers Settings (all sections, integration pages, tables, Apps), Developer tools, Logbook, History, Assist debug, Media browser, automation and script traces, toasts, notification drawer, and HACS (custom panel iframe).
+- Also dresses up a few spots that stay bare even with a theme: the system log (one card per entry, colored by severity, and the details dialog), the automation, script and blueprint editors (glass behind When / And if / Then do), integration cards (thin divider), disabled devices (hatching + DISABLED pill), the Add integration dialog, and HACS's download dialog and READMEs. Inner corners follow your theme's card radius.
 - Optional extras, on by default: pulsing neon header, neon scrollbars and tinted text selection, and a **SIGNAL LOST** screen when the connection to Home Assistant drops (GLITCH the cat, hologram style, with a wink when it comes back).
 
 ## Install
@@ -46,13 +47,14 @@ Example: `/local/theme-everywhere.js?v=1&neon=0`
 | `lovelace-background` | full-screen page background | `primary-background-color` |
 | `ha-card-background` (or `card-background-color`) | glass panels | — |
 | `ha-card-backdrop-filter` | blur behind the glass | no blur |
-| `ha-card-border-width`, `-color`, `-radius`, `-box-shadow` | glass panel border | 1px transparent, 12px radius |
+| `ha-card-border-width`, `-color`, `-radius`, `-box-shadow` | glass panel border | 1px transparent, 12px radius (inner corners scale with it) |
 | `rgb-card-background-color` | halo behind titles that sit on the image | black |
 | `rgb-primary-color` | header border and glow, scrollbars, table lines | — |
 | `app-header-backdrop-filter` | blur behind the header | no blur |
 | `blacklight-color` | second color of the header pulse | `#B400FF` |
 | `rgb-lavande`, `rgb-blacklight-color` | caret, selection, links (light tints read better than a dark primary on black) | `rgb-primary-color` |
-| `warning-color` | integrations in error | `#ffb800` |
+| `warning-color` | integrations in error, warning log entries | `#ffb800` |
+| `error-color` | error log entries, disabled devices | `#db4437` |
 
 The look depends a lot on `ha-card-background` being **translucent** (e.g. `rgba(4, 2, 14, 0.78)`) with a `ha-card-backdrop-filter` such as `blur(12px) saturate(1.5)`. With an opaque card background you get opaque panels on top of your image.
 
@@ -79,7 +81,7 @@ The background is a fixed `::before` layer behind the page, like the one dashboa
 
 ## Caveats
 
-- It targets internal component and class names of the HA frontend, tested with **Home Assistant 2026.9.4 (frontend 20260826.7)**. A frontend update can rename one of them. In that case that one area goes back to its original rendering. Nothing breaks.
+- It targets internal component and class names of the HA frontend, tested with **Home Assistant 2026.10.0**. A frontend update can rename one of them. In that case that one area goes back to its original rendering. Nothing breaks.
 - Neon scrollbars use `::-webkit-scrollbar` (Chrome, Edge, Safari, the companion apps). Firefox keeps its own scrollbars.
 - The header pulse is off on phones and touch tablets, and everything respects `prefers-reduced-motion`.
 - Upstream proposal to get this into Home Assistant itself: [frontend discussion #54459](https://github.com/home-assistant/frontend/discussions/54459).
@@ -88,7 +90,7 @@ The background is a fixed `::before` layer behind the page, like the one dashboa
 
 ## En français
 
-Le thème de Home Assistant s'arrête aux dashboards. Ce script étend votre thème aux pages Paramètres, Outils de développement, Journal, Médias et traces : même fond plein écran, même verre que vos cards, header néon. Il ne contient aucune couleur, il ne lit que les variables de votre thème. Une variable absente donne le rendu d'origine.
+Le thème de Home Assistant s'arrête aux dashboards. Ce script étend votre thème aux pages Paramètres, Outils de développement, Journal, Médias et traces (plus le journal système, les éditeurs d'automatisation, de script et de blueprint, les cases d'intégration et les dialogues HACS) : même fond plein écran, même verre que vos cards, header néon. Il ne contient aucune couleur, il ne lit que les variables de votre thème. Une variable absente donne le rendu d'origine.
 
 **Installation**
 
