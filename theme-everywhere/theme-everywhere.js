@@ -37,30 +37,31 @@ const THEME_EVERYWHERE_OPTS = (() => {
     ":host::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;" +
     "background:var(--lovelace-background,var(--primary-background-color))}";
 
+  // Theme tints as "r,g,b" triplets (rgba(var(--x),a)). Some themes put a hex in --rgb-*:
+  // normalized in JS per window, see tints(). Falls back to the raw variable.
+  // Selection/caret: LIGHT tints (lavande, blacklight), a dark primary reads poorly on black.
+  const PRI = "var(--neo-rgb-pri,var(--rgb-primary-color))";
+  const LAV = "var(--neo-rgb-lav,var(--rgb-lavande,var(--rgb-primary-color)))";
+  const BLK = "var(--neo-rgb-blk,var(--rgb-blacklight-color,var(--rgb-primary-color)))";
+
   // Header: neon bottom border, pulsing glow, blur (same treatment as a themed dashboard header).
   const HDR = !OPTS.neon ? "" :
     "@keyframes neo-hdr-pulse{" +
-    "0%,100%{border-bottom-color:rgba(var(--rgb-primary-color),1);" +
-    "box-shadow:0 0 6px rgba(var(--rgb-primary-color),.9),0 2px 18px rgba(var(--rgb-primary-color),.55)," +
-    "0 4px 40px rgba(var(--rgb-primary-color),.25)}" +
+    "0%,100%{border-bottom-color:rgba(" + PRI + ",1);" +
+    "box-shadow:0 0 6px rgba(" + PRI + ",.9),0 2px 18px rgba(" + PRI + ",.55)," +
+    "0 4px 40px rgba(" + PRI + ",.25)}" +
     "50%{border-bottom-color:var(--blacklight-color,#B400FF);" +
     "box-shadow:0 0 10px var(--blacklight-color,#B400FF)," +
     "0 2px 28px color-mix(in srgb,var(--blacklight-color,#B400FF) 75%,transparent)," +
-    "0 4px 55px rgba(var(--rgb-primary-color),.4)}}" +
-    ".top-app-bar,.toolbar{border-bottom:2px solid rgba(var(--rgb-primary-color),1) !important;" +
+    "0 4px 55px rgba(" + PRI + ",.4)}}" +
+    ".top-app-bar,.toolbar{border-bottom:2px solid rgba(" + PRI + ",1) !important;" +
     "-webkit-backdrop-filter:var(--app-header-backdrop-filter,none);" +
     "backdrop-filter:var(--app-header-backdrop-filter,none);" +
     "animation:neo-hdr-pulse 4s ease-in-out infinite}" +
     // Tablets and phones: no continuous animation
     "@media (max-width:767px),(hover:none) and (pointer:coarse){" +
-    ".top-app-bar,.toolbar{animation:none !important;box-shadow:0 0 8px rgba(var(--rgb-primary-color),.5)}}";
+    ".top-app-bar,.toolbar{animation:none !important;box-shadow:0 0 8px rgba(" + PRI + ",.5)}}";
 
-  // Text selection and caret: LIGHT theme tints (--rgb-lavande, --rgb-blacklight-color). A dark
-  // primary is hard to see on a black background. Falls back to the primary color when missing.
-  // Applied to EVERY shadow root (::selection does not cross shadow boundaries) and the document.
-  const LAV = "var(--rgb-lavande,var(--rgb-primary-color))";
-  const BLK = "var(--rgb-blacklight-color,var(--rgb-primary-color))";
-  const PRI = "var(--rgb-primary-color)";
   const SEL = !OPTS.neon ? "" :
     ":host,html{caret-color:rgb(" + LAV + ")}" +
     "input,textarea{caret-color:rgb(" + LAV + ") !important}" +
@@ -89,7 +90,7 @@ const THEME_EVERYWHERE_OPTS = (() => {
     "border:var(--ha-card-border-width,1px) solid var(--ha-card-border-color,transparent);" +
     "border-radius:var(--ha-card-border-radius,12px);box-shadow:var(--ha-card-box-shadow,none);box-sizing:border-box";
   // Section title sitting bare on the image: card-background halo to lift it off.
-  const HALO = "text-shadow:0 0 4px rgba(var(--rgb-card-background-color,0,0,0),1),0 0 10px rgba(var(--rgb-card-background-color,0,0,0),1),0 0 18px rgba(var(--rgb-card-background-color,0,0,0),.9)";
+  const HALO = "text-shadow:0 0 4px rgba(var(--neo-rgb-card,var(--rgb-card-background-color,0,0,0)),1),0 0 10px rgba(var(--neo-rgb-card,var(--rgb-card-background-color,0,0,0)),1),0 0 18px rgba(var(--neo-rgb-card,var(--rgb-card-background-color,0,0,0)),.9)";
   const H3 = "h3{color:var(--primary-text-color) !important;" + HALO + "}";
   // Bare titles/paragraphs (section landing pages, empty states): halo only, no box.
   const BARE = "h1,h2,.empty p,.empty h1{color:var(--primary-text-color) !important;" + HALO + "}.empty{" + GLASS + ";padding:24px 32px !important;width:fit-content !important;height:fit-content !important;max-width:640px;margin:auto !important;align-self:center}.empty a{color:rgb(" + LAV + ") !important}";
@@ -112,7 +113,7 @@ const THEME_EVERYWHERE_OPTS = (() => {
   // History paints no background at all (falls through to <html>): background layer, glass filter
   // pane and charts, and a glass pill for the empty state.
   const HISTORY = ".toolbar{" + GLASS + ";border-radius:0 !important;border-width:0 0 1px 0 !important;" +
-    "border-color:rgba(var(--rgb-primary-color),.35) !important;box-shadow:none !important}" +
+    "border-color:rgba(" + PRI + ",.35) !important;box-shadow:none !important}" +
     "ha-filter-pane{" + GLASS + ";margin:0 12px 12px 12px;overflow:hidden}" +
     "state-history-charts{" + GLASS + ";margin:12px;overflow:hidden}" +
     "ha-empty-state{" + GLASS + ";margin:auto;width:fit-content;height:fit-content;padding:20px 32px;max-width:90%}";
@@ -150,13 +151,13 @@ const THEME_EVERYWHERE_OPTS = (() => {
   // Integrations search bar: band painted in opaque primary background (black stripe over the
   // image). Same glass as cards, thin primary line at the bottom to separate it from the grid.
   const SEARCH = ".search{" + GLASS + ";border-radius:0 !important;border-width:0 0 1px 0 !important;" +
-    "border-color:rgba(var(--rgb-primary-color),.35) !important;box-shadow:none !important}";
+    "border-color:rgba(" + PRI + ",.35) !important;box-shadow:none !important}";
   // Data tables (Devices, Entities, Automations, Helpers…): toolbar and group titles painted in
   // opaque primary background on top of the glass already on the table. Made transparent (no
   // second glass, which would double the darkening); primary line / tint instead.
   const TABLEBAR = ".table-header{background:transparent !important;" +
-    "border-bottom:1px solid rgba(var(--rgb-primary-color),.35) !important}";
-  const GROUP = ".group-header{background:rgba(var(--rgb-primary-color),.12) !important}";
+    "border-bottom:1px solid rgba(" + PRI + ",.35) !important}";
+  const GROUP = ".group-header{background:rgba(" + PRI + ",.12) !important}";
   // Home Assistant's "connection lost" toast would sit on top of the SIGNAL LOST screen: hidden,
   // only when that screen is enabled.
   const TOAST = !OPTS.signalLost ? "" :
@@ -199,8 +200,8 @@ const THEME_EVERYWHERE_OPTS = (() => {
   const R10 = "calc(var(--ha-card-border-radius,var(--ha-border-radius-lg,12px))*.55)";
   const R8 = "calc(var(--ha-card-border-radius,var(--ha-border-radius-lg,12px))*.45)";
   const R6 = "calc(var(--ha-card-border-radius,var(--ha-border-radius-lg,12px))*.33)";
-  const DLGGLASS = "--ha-dialog-surface-background:rgba(var(--rgb-card-background-color,4,2,14),.78);" +
-    "--mdc-dialog-scrim-color:rgba(var(--rgb-primary-background-color,2,1,10),.35);" +
+  const DLGGLASS = "--ha-dialog-surface-background:rgba(var(--neo-rgb-card,var(--rgb-card-background-color,4,2,14)),.78);" +
+    "--mdc-dialog-scrim-color:rgba(var(--neo-rgb-bg,var(--rgb-primary-background-color,2,1,10)),.35);" +
     "--neo-dialog-sheen:linear-gradient(135deg,rgba(255,255,255,.055),rgba(" + LAV + ",.06) 28%,transparent 52%)," +
     "radial-gradient(ellipse at 0 0,rgba(" + PRI + ",.22),transparent 56%);" +
     "--ha-dialog-surface-backdrop-filter:var(--ha-card-backdrop-filter)";
@@ -253,7 +254,7 @@ const THEME_EVERYWHERE_OPTS = (() => {
   // HACS iframe: "download" dialog (shadow of the host, then of its mdc ha-dialog) and README.
   const HACSDLG = "mwc-button{--mdc-theme-primary:rgb(" + LAV + ");--mdc-typography-button-letter-spacing:.12em;border-radius:" + R8 + "}" +
     "mwc-button[slot=secondaryAction]{--mdc-theme-primary:var(--secondary-text-color)}" +
-    "mwc-button[slot=primaryAction]{--mdc-theme-primary:var(--text-primary-color,#fff);border:1px solid rgba(" + LAV + ",.65);" +
+    "mwc-button[slot=primaryAction]{--mdc-theme-primary:var(--primary-text-color,#fff);border:1px solid rgba(" + LAV + ",.65);" +
     "background:rgba(" + PRI + ",.2);box-shadow:0 0 14px rgba(" + PRI + ",.5),inset 0 0 10px rgba(" + PRI + ",.18)}" +
     "code{color:rgb(" + LAV + ");padding:1px 6px;border-radius:" + R6 + ";border:1px solid rgba(" + PRI + ",.35);background:rgba(" + PRI + ",.12)}" +
     ".note{padding:10px 14px;border-radius:" + R10 + ";border:1px solid rgba(" + PRI + ",.28);border-left:3px solid rgb(" + LAV + ");" +
@@ -274,7 +275,7 @@ const THEME_EVERYWHERE_OPTS = (() => {
     "ha-markdown-element li::marker{color:rgb(" + LAV + ")}" +
     "ha-markdown-element code{padding:1px 6px;border-radius:" + R6 + ";border:1px solid rgba(" + PRI + ",.3);background:rgba(" + PRI + ",.1);color:rgb(" + LAV + ")}" +
     "ha-markdown-element pre{padding:12px 16px;border-radius:" + R10 + ";border:1px solid rgba(" + PRI + ",.35);border-left:3px solid rgb(" + LAV + ");" +
-    "background:rgba(var(--rgb-primary-background-color,2,1,10),.55);overflow:auto}" +
+    "background:rgba(var(--neo-rgb-bg,var(--rgb-primary-background-color,2,1,10)),.55);overflow:auto}" +
     "ha-markdown-element pre code{padding:0;border:0;background:none}" +
     "ha-markdown-element table{border-collapse:separate;border-spacing:0;border:1px solid rgba(" + PRI + ",.35);border-radius:" + R10 + ";overflow:hidden}" +
     "ha-markdown-element th{background:rgba(" + PRI + ",.18);text-shadow:0 0 8px rgba(" + LAV + ",.4)}" +
@@ -372,6 +373,75 @@ const THEME_EVERYWHERE_OPTS = (() => {
     scan();
   };
 
+  // Normalizes theme tints (hex, rgb(), triplet) to triplets, in a separate <style>:
+  // writing on <html> would wake the observer. One fallback chain per tint.
+  const TINTS = {
+    pri: ["--rgb-primary-color", "--primary-color"],
+    lav: ["--rgb-lavande", "--rgb-primary-color", "--primary-color"],
+    blk: ["--rgb-blacklight-color", "--rgb-primary-color", "--primary-color"],
+    bg: ["--rgb-primary-background-color", "--primary-background-color"],
+    card: ["--rgb-card-background-color", "--card-background-color"],
+  };
+  const TRIPLET = /^\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}$/;
+  const tintWins = new Set();
+  const tints = (win) => {
+    const doc = win.document;
+    let tag = doc.getElementById("neo-tints");
+    if (!tag) {
+      tag = doc.createElement("style");
+      tag.id = "neo-tints";
+      doc.head.appendChild(tag);
+    }
+    const probe = doc.createElement("i");
+    probe.style.display = "none";
+    doc.documentElement.appendChild(probe);
+    const roots = [win.getComputedStyle(doc.documentElement)];
+    if (win !== win.top) roots.push(win.top.getComputedStyle(win.top.document.documentElement));
+    const toRgb = (raw) => {
+      if (TRIPLET.test(raw)) return raw;
+      probe.style.color = "";
+      probe.style.color = raw;
+      if (!probe.style.color) return "";
+      const m = win.getComputedStyle(probe).color.match(/^rgba?\(([\d.]+),\s*([\d.]+),\s*([\d.]+)/);
+      return m ? m[1] + "," + m[2] + "," + m[3] : "";
+    };
+    const out = [];
+    for (const [k, chain] of Object.entries(TINTS)) {
+      let v = "";
+      for (const name of chain) {
+        for (const cs of roots) {
+          const raw = cs.getPropertyValue(name).trim();
+          if (raw && (v = toRgb(raw))) break;
+        }
+        if (v) break;
+      }
+      if (v) out.push("--neo-rgb-" + k + ":" + v);
+    }
+    probe.remove();
+    const css = ":root{" + out.join(";") + "}";
+    if (tag.textContent !== css) tag.textContent = css;
+  };
+  // Theme change = HA rewrites the <html> style (page and iframes).
+  const watchTints = (win) => {
+    tintWins.add(win);
+    tints(win);
+    let raf = 0;
+    const again = () => {
+      if (raf) return;
+      raf = win.requestAnimationFrame(() => {
+        raf = 0;
+        for (const w of tintWins) {
+          try {
+            tints(w);
+          } catch (e) {
+            tintWins.delete(w);
+          }
+        }
+      });
+    };
+    new win.MutationObserver(again).observe(win.document.documentElement, { attributes: true, attributeFilter: ["style", "class"] });
+  };
+
   // Installs the hook in a window (the page, then each custom panel iframe). A constructed
   // CSSStyleSheet can only be adopted in its own document: sheets are per window.
   const install = (win) => {
@@ -379,6 +449,7 @@ const THEME_EVERYWHERE_OPTS = (() => {
     const desc = Object.getOwnPropertyDescriptor(win.ShadowRoot.prototype, "adoptedStyleSheets");
     if (!desc || !desc.get || !desc.set) return;
     win.__themeEverywhereSheets = true;
+    watchTints(win);
     const cache = new Map();
     const mk = (css) => {
       if (!cache.has(css)) {
@@ -455,7 +526,7 @@ const THEME_EVERYWHERE_OPTS = (() => {
   .veil{position:fixed;inset:0;z-index:2147483000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
     pointer-events:none;opacity:0;transition:opacity .5s;
     -webkit-backdrop-filter:blur(${FX.blur}px) grayscale(${FX.desat});backdrop-filter:blur(${FX.blur}px) grayscale(${FX.desat});
-    background:rgba(var(--rgb-primary-background-color,0,0,0),${FX.dim});--c:var(--success-color,hsl(${FX.hue} 90% 62%));--g:${FX.glow}px;--s:${FX.split}px;color:var(--c);
+    background:rgba(var(--neo-rgb-bg,var(--rgb-primary-background-color,0,0,0)),${FX.dim});--c:var(--success-color,hsl(${FX.hue} 90% 62%));--g:${FX.glow}px;--s:${FX.split}px;color:var(--c);
     font-family:var(--primary-font-family,'Orbitron','Eurostile','Bahnschrift','DIN Alternate','Franklin Gothic Medium',system-ui,sans-serif)}
   .veil[hidden]{display:none}
   .on{opacity:1;animation:boot .9s steps(1) both}
@@ -479,7 +550,7 @@ const THEME_EVERYWHERE_OPTS = (() => {
   .wink .lid{animation:wink .5s ease-in-out 2}
   @keyframes wink{0%,100%{transform:scaleY(0)}50%{transform:scaleY(1)}}
   .msg{text-align:center;text-shadow:0 0 calc(var(--g)*.4) var(--c),0 0 var(--g) var(--c)}
-  .msg b{display:block;font-size:clamp(22px,6vw,44px);letter-spacing:.22em;font-weight:700;color:var(--text-primary-color,#fff)}
+  .msg b{display:block;font-size:clamp(22px,6vw,44px);letter-spacing:.22em;font-weight:700;color:var(--primary-text-color,#fff)}
   .msg span{display:block;margin-top:10px;font:clamp(12px,2.6vw,18px) var(--ha-font-family-code,'JetBrains Mono','Cascadia Mono','Consolas','SF Mono',ui-monospace,monospace);letter-spacing:.18em;color:var(--c)}
   @media (prefers-reduced-motion:reduce){.veil *,.veil::after,.on{animation:none !important}}`;
 

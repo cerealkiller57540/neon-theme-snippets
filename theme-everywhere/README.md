@@ -57,9 +57,11 @@ Example: `/local/theme-everywhere.js?v=1&neon=0`
 | `error-color` | error log entries, disabled devices, red channel of the SIGNAL LOST glitch | `#db4437` |
 | `info-color` | cyan channel of the SIGNAL LOST glitch | `#00e5ff` |
 | `success-color` | SIGNAL LOST cat and text | green |
-| `rgb-primary-background-color` | dialog scrim, SIGNAL LOST veil, code blocks in READMEs | near black |
-| `text-primary-color` | SIGNAL LOST title, HACS main button | `#fff` |
+| `rgb-primary-background-color` | dialog scrim, SIGNAL LOST veil, code blocks in READMEs | `primary-background-color` |
+| `primary-text-color` | SIGNAL LOST title, HACS main button | `#fff` |
 | `primary-font-family`, `ha-font-family-code` | SIGNAL LOST title, log and code text | Orbitron, monospace |
+
+`rgb-*` variables can hold a triplet (`98, 0, 234`) or any CSS color (`#6200EA`, as some older themes do): the script converts them. When one is missing it falls back to the matching plain color (`primary-color`, `card-background-color`…).
 
 The look depends a lot on `ha-card-background` being **translucent** (e.g. `rgba(4, 2, 14, 0.78)`) with a `ha-card-backdrop-filter` such as `blur(12px) saturate(1.5)`. With an opaque card background you get opaque panels on top of your image.
 
